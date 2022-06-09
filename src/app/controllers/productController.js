@@ -5,7 +5,6 @@ const ProductService = require("../services/productService");
 const RestaurantService = require("../services/restaurantService");
 
 const authMiddleware = require("../middlewares/authMiddleware");
-const Restaurant = require("../models/Restaurant");
 
 const router = express.Router();
 
@@ -15,7 +14,8 @@ router.use(authMiddleware);
 exports.getAll = async function (req, res, next) {
   try {
     var products = await Product.find();
-    return res.status(200).send(products);
+    // return produts and count
+    return res.status(200).send({ products, count: products.length });
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }
@@ -26,7 +26,19 @@ exports.getById = async function (req, res, next) {
   var id = req.params.id;
   try {
     var product = await Product.findById(id);
+
     return res.status(200).send(product);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+}
+
+exports.filter = async function (req, res, next) {
+  try {
+    var query = req.query;
+
+    var products = await ProductService.filter(query);
+    return res.status(200).send({ products, count: products.length });
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }

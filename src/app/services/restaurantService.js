@@ -1,5 +1,24 @@
 const Restaurant = require("../models/Restaurant");
 
+exports.filter = async (query) => {
+  try {
+    let city = query.city
+    let cuisine = query.cuisine
+
+    let restaurants = await Restaurant.find({
+      $or: [
+        { city: city },
+        { typeofRestaurant: cuisine },
+      ],
+    }).populate([ "products" ]);
+
+    return restaurants;
+  } catch (err) {
+    throw err;
+  }
+}
+
+
 //check if restaurant exists
 exports.checkIfRestaurantExists = async (id) => {
   try {

@@ -4,8 +4,8 @@ A Evnts é uma empresa mineira, cheia de mineiros, então nada melhor que um tes
 
 ## :floppy_disk: Instalação
 ```
-git clone <repo>
-cd <folder>
+git clone https://github.com/debora-rebelatto/uaifoods
+cd uaifoods
 npm i
 ```
 
@@ -74,10 +74,9 @@ A consulta pode ser feita por um ou mais destes parâmetros e deve trazer a jun�
 - [x] Listar todos os produtos
 
 ### Filtros restaurante
-- [ ] Filtro cidade
-- [ ] filtro tipo de cozinha
-- [ ] Pratos
-- [ ] Distância
+- [x] Filtro cidade
+- [x] filtro tipo de cozinha
+- [x] Pratos
 
 ### Usuário
 - [x] Cadastro

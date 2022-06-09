@@ -1,6 +1,21 @@
 const Product = require("../models/Product");
 const Restaurant = require("../models/Restaurant");
-const RestaurantService = require("../services/restaurantService");
+
+exports.filter = async function (query) {
+  try {
+    let productName = query.name.toString();
+
+    let products = await Product.find({
+      $or: [
+        { name: { $regex: productName, $options: 'i' } },
+      ],
+    }).populate([ "restaurant" ]);
+
+    return products;
+  } catch (err) {
+    throw err;
+  }
+}
 
 exports.createProduct = async function (body, restaurantId) {
   try {

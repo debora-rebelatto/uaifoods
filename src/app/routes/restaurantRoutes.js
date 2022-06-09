@@ -6,6 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware")
 const router = express.Router()
 
 router.get("/", RestaurantController.getAll);
+router.get("/filter", RestaurantController.filter);
 router.get("/:id", RestaurantController.getById);
 router.post("/", authMiddleware, RestaurantController.create);
 router.put("/:id", authMiddleware, RestaurantController.update);

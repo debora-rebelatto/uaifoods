@@ -11,7 +11,7 @@ router.use(authMiddleware);
 exports.getAll = async function (req, res, next) {
   try {
     var restaurants = await Restaurant.find();
-    return res.status(200).send(restaurants);
+    return res.status(200).send({ restaurants, count: restaurants.length });
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }
@@ -50,7 +50,6 @@ exports.update = async function (req, res, next) {
   }
 }
 
-// delete Restaurant by ID
 exports.delete = async function (req, res, next) {
   var id = req.params.id;
 
@@ -64,3 +63,11 @@ exports.delete = async function (req, res, next) {
   }
 }
 
+exports.filter = async function (req, res, next) {
+  try {
+    var restaurants = await RestaurantService.filter(req.query);
+    return res.status(200).send({ restaurants, count: restaurants.length });
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+}
