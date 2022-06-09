@@ -2,8 +2,10 @@ const express = require("express");
 
 const Product = require("../models/Product");
 const ProductService = require("../services/productService");
+const RestaurantService = require("../services/restaurantService");
 
 const authMiddleware = require("../middlewares/authMiddleware");
+const Restaurant = require("../models/Restaurant");
 
 const router = express.Router();
 
@@ -30,21 +32,14 @@ exports.getById = async function (req, res, next) {
   }
 }
 
-exports.getAllProductsByRestaurant = async function (req, res, next) {
-  var restaurantId = req.params.restaurantId;
-  try {
-    var products = await ProductService.getAllProductsByRestaurant(restaurantId);
-    return res.status(200).send(products);
-  } catch (err) {
-    return res.status(400).json({ message: err.message });
-  }
-}
-
 // create product
 exports.create = async function (req, res, next) {
   try {
+
+    await RestaurantService.checkIfRestaurantExists(req.params.id)
+
     // create product
-    let product = await ProductService.createProduct(req.body);
+    let product = await ProductService.createProduct(req.body, req.params.id);
 
     // push product id to restaurant
     await ProductService.pushProductToRestaurant(req.params.id, product._id);
@@ -60,7 +55,7 @@ exports.create = async function (req, res, next) {
 exports.update = async function (req, res, next) {
   var id = req.params.id;
   try {
-    var product = await ProductService.update(id, req.body);
+    var product = await ProductService.update(id, req.body, req.userId);
     return res.status(200).send(product);
   } catch (err) {
     return res.status(400).json({ message: err.message });

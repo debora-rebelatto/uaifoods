@@ -20,7 +20,6 @@ exports.getAll = async function (req, res, next) {
 exports.getById = async function (req, res, next) {
   var id = req.params.id;
   try {
-    console.log(id);
     var restaurant = await Restaurant.findById(id).populate([ "products" ]);
     return res.status(200).send(restaurant);
   } catch (err) {
@@ -31,7 +30,7 @@ exports.getById = async function (req, res, next) {
 // Create restaurant
 exports.create = async function (req, res, next) {
   try {
-    let restaurant = await RestaurantService.createRestaurant(req.body);
+    let restaurant = await RestaurantService.createRestaurant(req.body, req.userId);
     return res.status(200).send(restaurant);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -42,9 +41,9 @@ exports.create = async function (req, res, next) {
 exports.update = async function (req, res, next) {
   var id = req.params.id;
   try {
-    var isOwner = await RestaurantService.checkIfUserIsOwner(id, req.userId);
+    await RestaurantService.checkIfUserIsOwner(id, req.userId);
 
-    // var restaurant = await RestaurantService.update(id, req.body);
+    var restaurant = await RestaurantService.update(id, req.body);
     return res.status(200).send(restaurant);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -56,8 +55,10 @@ exports.delete = async function (req, res, next) {
   var id = req.params.id;
 
   try {
-    await Restaurant.findByIdAndDelete(id);
-    return res.status(200).send({ "ok" : "Restaurante deletado" });
+    await RestaurantService.checkIfUserIsOwner(id, req.userId);
+    // delete all of the products
+    let restaurant = await Restaurant.findByIdAndDelete(id);
+    return res.status(200).send({ message: "Restaurant deleted" });
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }

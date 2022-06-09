@@ -1,9 +1,12 @@
 const Product = require("../models/Product");
 const Restaurant = require("../models/Restaurant");
+const RestaurantService = require("../services/restaurantService");
 
-exports.createProduct = async function (body) {
+exports.createProduct = async function (body, restaurantId) {
   try {
-    var product = await Product.create({ ...body });
+
+    var product = await Product.create({ ...body, restaurant: restaurantId });
+
     return product;
   } catch (err) {
     throw new Error(err);
@@ -12,7 +15,6 @@ exports.createProduct = async function (body) {
 
 exports.pushProductToRestaurant = async function (restaurantId, productId) {
   try {
-    console.log(restaurantId, productId);
     var restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant) {
       throw new Error("Restaurant not found");
@@ -25,15 +27,21 @@ exports.pushProductToRestaurant = async function (restaurantId, productId) {
   }
 }
 
-exports.update = async function (id, body) {
+exports.update = async function (id, body, userId) {
   try {
     var product = await Product.findById(id);
+
     if (!product) {
       throw new Error("Product not found");
     }
-    if (product.owner != req.userId) {
-      throw new Error("You are not the owner of this product");
+
+    var restaurantId = product.restaurant;
+    var restaurant = await Restaurant.findById(restaurantId);
+
+    if (restaurant.owner.toString() !== userId) {
+      throw new Error("You are not the owner of this restaurant");
     }
+
     var updatedProduct = await Product.findByIdAndUpdate(id, body, { new: true });
     return updatedProduct;
   } catch (err) {
@@ -45,11 +53,11 @@ exports.delete = async function (id) {
   try {
     var product = await Product.findById(id);
     if (!product) {
-      return res.status(400).send({ error: "Product not found" });
+      throw new Error("Product not found");
     }
 
     await product.remove();
-    return res.status(200).send({ message: "Product deleted" });
+    return product;
   } catch (err) {
     throw new Error(err);
   }
