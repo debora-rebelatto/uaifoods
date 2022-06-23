@@ -13,7 +13,7 @@ npm i
 ```
 touch .env
 ```
-E copie a key disponível [neste docs](https://docs.google.com/document/d/1m45nO_iXQJr_BOM41YzruvdHfLW2OhYaYwQHscx2M3E/edit?usp=sharing) para o arquivo criado na raiz do projeto
+E copie a key disponível [neste docs](https://docs.google.com/) para o arquivo criado na raiz do projeto
 
 
 
