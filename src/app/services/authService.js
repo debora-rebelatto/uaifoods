@@ -2,7 +2,13 @@ const bcrypt = require("bcryptjs");
 
 var User = require('../models/User')
 
-exports.register = async function (body) {
+module.exports = {
+  register,
+  authenticate,
+  deleteById
+}
+
+async function register(body) {
   try {
     var user = await User.create(body);
     user.password = undefined;
@@ -12,7 +18,7 @@ exports.register = async function (body) {
   }
 }
 
-exports.authenticate = async function (email, password) {
+async function authenticate(email, password) {
   try {
     var user = await User.findOne({ email }).select('+password');
 
@@ -32,7 +38,7 @@ exports.authenticate = async function (email, password) {
   }
 }
 
-exports.delete = async function (id) {
+async function deleteById(id) {
   try {
     if(!await User.findById(id)) throw Error('Email not found');
     var user = await User.findByIdAndDelete(id);

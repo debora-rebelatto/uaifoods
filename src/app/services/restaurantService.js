@@ -1,6 +1,14 @@
 const Restaurant = require("../models/Restaurant");
 
-exports.filter = async (query) => {
+module.exports = {
+  filter,
+  createRestaurant,
+  checkIfUserIsOwner,
+  update,
+  deleteById,
+}
+
+async function filter(query) {
   try {
     let city = query.city
     let cuisine = query.cuisine
@@ -18,9 +26,7 @@ exports.filter = async (query) => {
   }
 }
 
-
-//check if restaurant exists
-exports.checkIfRestaurantExists = async (id) => {
+async function checkIfRestaurantExists(id) {
   try {
     var restaurant = await Restaurant.findById(id);
     if (!restaurant) {
@@ -32,7 +38,7 @@ exports.checkIfRestaurantExists = async (id) => {
   }
 }
 
-exports.createRestaurant = async (body, userId) => {
+async function createRestaurant(body, userId) {
   try {
     //verify if cnpj already exists
     if (await Restaurant.findOne({ cnpj: body.cnpj })) {
@@ -47,7 +53,7 @@ exports.createRestaurant = async (body, userId) => {
   }
 }
 
-exports.checkIfUserIsOwner = async (restaurantId, userId) => {
+async function checkIfUserIsOwner(restaurantId, userId)  {
   try {
     var restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant) {
@@ -62,7 +68,7 @@ exports.checkIfUserIsOwner = async (restaurantId, userId) => {
   }
 }
 
-exports.update = async (id, body) => {
+async function update (id, body) {
   try {
     var updatedRestaurant = await Restaurant.findByIdAndUpdate(id, body, { new: true });
     return updatedRestaurant;
@@ -71,7 +77,7 @@ exports.update = async (id, body) => {
   }
 }
 
-exports.delete = async (id) => {
+async function deleteById (id) {
   try {
     if(!await this.checkIfRestaurantExists(id)) return;
 

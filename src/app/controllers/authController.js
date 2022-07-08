@@ -5,7 +5,13 @@ const AuthService = require("../services/authService");
 
 const User = require('../models/User');
 
-exports.register = async function (req, res, next) {
+module.exports = {
+  register,
+  authenticate,
+  deleteById
+}
+
+async function register (req, res, next) {
   try {
     // verify if email exists
     if(await User.findOne({ email: req.body.email }))
@@ -18,7 +24,7 @@ exports.register = async function (req, res, next) {
   }
 };
 
-exports.authenticate = async function (req, res, next) {
+async function authenticate(req, res, next) {
   try {
 
     var user = await AuthService.authenticate(req.body.email, req.body.password);
@@ -33,8 +39,7 @@ exports.authenticate = async function (req, res, next) {
   }
 };
 
-// Delete User by ID
-exports.delete = async function (req, res, next) {
+async function deleteById(req, res, next) {
   var id = req.params.id;
   try {
     await AuthService.delete(id);

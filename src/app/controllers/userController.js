@@ -1,8 +1,12 @@
 const User = require('../models/User');
 const UserServices = require('../services/userServices');
 
-// List All Users
-exports.getAll = async function (req, res, next) {
+module.exports = {
+  getAll,
+  getById
+}
+
+async function getAll(req, res, next) {
   try {
     // if has no user, return
     var users = await User.find();
@@ -12,8 +16,7 @@ exports.getAll = async function (req, res, next) {
   }
 };
 
-// Get User by ID
-exports.getById = async function (req, res, next) {
+async function getById(req, res, next) {
   var id = req.params.id;
   try {
     var user = await User.findById(id);

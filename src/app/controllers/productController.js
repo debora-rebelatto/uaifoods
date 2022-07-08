@@ -10,8 +10,16 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-// get all products
-exports.getAll = async function (req, res, next) {
+module.exports = {
+  getAll,
+  getById,
+  filter,
+  create,
+  updateById,
+  deleteById
+}
+
+async function getAll(req, res, next) {
   try {
     var products = await Product.find();
     // return produts and count
@@ -21,8 +29,7 @@ exports.getAll = async function (req, res, next) {
   }
 }
 
-// get product by id
-exports.getById = async function (req, res, next) {
+async function getById(req, res, next) {
   var id = req.params.id;
   try {
     var product = await Product.findById(id);
@@ -33,7 +40,7 @@ exports.getById = async function (req, res, next) {
   }
 }
 
-exports.filter = async function (req, res, next) {
+async function filter(req, res, next) {
   try {
     var query = req.query;
 
@@ -44,8 +51,7 @@ exports.filter = async function (req, res, next) {
   }
 }
 
-// create product
-exports.create = async function (req, res, next) {
+async function create(req, res, next) {
   try {
 
     await RestaurantService.checkIfRestaurantExists(req.params.id)
@@ -63,8 +69,7 @@ exports.create = async function (req, res, next) {
   }
 }
 
-// update product
-exports.update = async function (req, res, next) {
+async function updateById(req, res, next) {
   var id = req.params.id;
   try {
     var product = await ProductService.update(id, req.body, req.userId);
@@ -74,8 +79,7 @@ exports.update = async function (req, res, next) {
   }
 }
 
-// delete product
-exports.delete = async function (req, res, next) {
+async function deleteById(req, res, next) {
   var id = req.params.id;
   try {
     var product = await ProductService.delete(id);

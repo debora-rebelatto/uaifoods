@@ -1,7 +1,16 @@
 const Product = require("../models/Product");
 const Restaurant = require("../models/Restaurant");
 
-exports.filter = async function (query) {
+module.exports = {
+  filter,
+  createProduct,
+  pushProductToRestaurant,
+  update,
+  deleteById
+}
+
+
+async function filter (query) {
   try {
     let productName = query.name.toString();
 
@@ -17,7 +26,7 @@ exports.filter = async function (query) {
   }
 }
 
-exports.createProduct = async function (body, restaurantId) {
+async function createProduct(body, restaurantId) {
   try {
 
     var product = await Product.create({ ...body, restaurant: restaurantId });
@@ -28,7 +37,7 @@ exports.createProduct = async function (body, restaurantId) {
   }
 }
 
-exports.pushProductToRestaurant = async function (restaurantId, productId) {
+async function pushProductToRestaurant(restaurantId, productId) {
   try {
     var restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant) {
@@ -42,7 +51,7 @@ exports.pushProductToRestaurant = async function (restaurantId, productId) {
   }
 }
 
-exports.update = async function (id, body, userId) {
+async function update(id, body, userId) {
   try {
     var product = await Product.findById(id);
 
@@ -64,7 +73,7 @@ exports.update = async function (id, body, userId) {
   }
 }
 
-exports.delete = async function (id) {
+async function deleteById(id) {
   try {
     var product = await Product.findById(id);
     if (!product) {

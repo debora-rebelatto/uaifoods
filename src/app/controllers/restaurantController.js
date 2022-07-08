@@ -8,7 +8,16 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-exports.getAll = async function (req, res, next) {
+module.exports = {
+  getAll,
+  getById,
+  filter,
+  create,
+  updateById,
+  deleteById
+}
+
+async function getAll(req, res, next) {
   try {
     var restaurants = await Restaurant.find();
     return res.status(200).send({ restaurants, count: restaurants.length });
@@ -17,7 +26,7 @@ exports.getAll = async function (req, res, next) {
   }
 }
 
-exports.getById = async function (req, res, next) {
+async function getById(req, res, next) {
   var id = req.params.id;
   try {
     var restaurant = await Restaurant.findById(id).populate([ "products" ]);
@@ -28,7 +37,7 @@ exports.getById = async function (req, res, next) {
 }
 
 // Create restaurant
-exports.create = async function (req, res, next) {
+async function create(req, res, next) {
   try {
     let restaurant = await RestaurantService.createRestaurant(req.body, req.userId);
     return res.status(200).send(restaurant);
@@ -38,7 +47,7 @@ exports.create = async function (req, res, next) {
 }
 
 // Update restaurant
-exports.update = async function (req, res, next) {
+async function updateById(req, res, next) {
   var id = req.params.id;
   try {
     await RestaurantService.checkIfUserIsOwner(id, req.userId);
@@ -50,7 +59,7 @@ exports.update = async function (req, res, next) {
   }
 }
 
-exports.delete = async function (req, res, next) {
+async function deleteById(req, res, next) {
   var id = req.params.id;
 
   try {
@@ -63,7 +72,7 @@ exports.delete = async function (req, res, next) {
   }
 }
 
-exports.filter = async function (req, res, next) {
+async function filter(req, res, next) {
   try {
     var restaurants = await RestaurantService.filter(req.query);
     return res.status(200).send({ restaurants, count: restaurants.length });
