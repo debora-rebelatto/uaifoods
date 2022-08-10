@@ -1,7 +1,5 @@
 # :fries: UAIFood
 
-A Evnts é uma empresa mineira, cheia de mineiros, então nada melhor que um teste no que fazemos de melhor: comer. Para isto, neste teste, você vai ter que nos ajudar e criar o disruptivo site UaiFood.
-
 ## :floppy_disk: Instalação
 ```
 git clone https://github.com/debora-rebelatto/uaifoods
